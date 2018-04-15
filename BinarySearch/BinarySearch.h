@@ -19,17 +19,16 @@ private:
 
     bool IsSorted(std::vector<int> array);
 
-public:
     static unsigned int GetCoresCount();
 
-    unsigned int Search(std::vector<int> array, unsigned int start, unsigned int end, int key);
+    void Search(std::vector<int> array, unsigned int start, unsigned int end, int key);
 
 public:
     BinarySearch(std::vector<int> array, std::vector<int> search_keys);
 
     void PrintArray();
 
-    int Search();
+    void Search();
 };
 
 
