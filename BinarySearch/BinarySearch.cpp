@@ -49,14 +49,13 @@ void BinarySearch::Search() {
         std::cout << "the array is sorted, so we can use binary search: " << std::endl;
 
         for (int i = 0; i < this->search_keys.size(); ++i)
-            thread_pool.push_back(
-                    std::thread(&BinarySearch::BinSearch, this, 0, this->array.size(), this->search_keys.at(i)));
+            thread_pool.emplace_back(&BinarySearch::BinSearch, this, 0, this->array.size(), this->search_keys.at(i));
 
 
     } else {
         std::cout << "[!] the array isn't sorted, so we using simple search: " << std::endl;
         for (int i = 0; i < cpuCount; ++i)
-            thread_pool.push_back(std::thread(&BinarySearch::SimpleSearch, this, 0, this->array.size()));
+            thread_pool.emplace_back(&BinarySearch::SimpleSearch, this, 0, this->array.size());
 
     }
     for (auto &thread : thread_pool) {
@@ -93,10 +92,9 @@ void BinarySearch::BinSearch(unsigned int start, unsigned int end, int key) {
 
 void BinarySearch::SimpleSearch(unsigned int start, unsigned int end) {
     for (int i = start; i < end; ++i) {
-        for (int j = 0; j < this->search_keys.size(); ++j) {
-            if (this->array.at(i) == this->search_keys.at(j))
-                std::cout << "index of key [" << this->search_keys.at(j) << "] is [" << i << "]" << std::endl;
-
+        for (int search_key : this->search_keys) {
+            if (this->array.at(i) == search_key)
+                std::cout << "index of key [" << search_key << "] is [" << i << "]" << std::endl;
         }
     }
 }
