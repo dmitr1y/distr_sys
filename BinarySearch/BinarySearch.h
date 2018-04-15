@@ -19,11 +19,13 @@ private:
 
     void PrintArray(std::vector<int> array);
 
-
+    bool isSorted(std::vector<int> array);
 public:
     BinarySearch(std::vector<int> array, std::vector<int> search_keys);
 
     void PrintArray();
+
+    int Search(int value);
 };
 
 
