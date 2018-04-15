@@ -47,13 +47,20 @@ void BinarySearch::Search() {
     if (this->IsSorted(this->array)) {
 
         std::cout << "the array is sorted, so we can use binary search: " << std::endl;
-        std::thread t1(
-                static_cast<void (BinarySearch::*)(std::vector<int> array, unsigned int start, unsigned int end,
-                                                   int key)>(&BinarySearch::Search), this, this->array, 0,
-                this->array.size(), this->search_keys.at(0));
-        if (t1.joinable()) t1.join();
+
+        for (int i = 0; i < this->search_keys.size(); ++i)
+            thread_pool.push_back(
+                    std::thread(&BinarySearch::BinSearch, this, 0, this->array.size(), this->search_keys.at(i)));
+
+
     } else {
         std::cout << "[!] the array isn't sorted, so we using simple search: " << std::endl;
+        for (int i = 0; i < cpuCount; ++i)
+            thread_pool.push_back(std::thread(&BinarySearch::SimpleSearch, this, 0, this->array.size()));
+
+    }
+    for (auto &thread : thread_pool) {
+        thread.join();
     }
 }
 
@@ -65,7 +72,7 @@ unsigned int BinarySearch::GetCoresCount() {
     return std::thread::hardware_concurrency();
 }
 
-void BinarySearch::Search(std::vector<int> array, unsigned int start, unsigned int end, int key) {
+void BinarySearch::BinSearch(unsigned int start, unsigned int end, int key) {
     unsigned int mid = 0;
     int left = start;
     int right = end;
@@ -81,5 +88,15 @@ void BinarySearch::Search(std::vector<int> array, unsigned int start, unsigned i
         }
         if (left > right)
             throw std::invalid_argument("borders closed.");
+    }
+}
+
+void BinarySearch::SimpleSearch(unsigned int start, unsigned int end) {
+    for (int i = start; i < end; ++i) {
+        for (int j = 0; j < this->search_keys.size(); ++j) {
+            if (this->array.at(i) == this->search_keys.at(j))
+                std::cout << "index of key [" << this->search_keys.at(j) << "] is [" << i << "]" << std::endl;
+
+        }
     }
 }

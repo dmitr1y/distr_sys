@@ -21,7 +21,9 @@ private:
 
     static unsigned int GetCoresCount();
 
-    void Search(std::vector<int> array, unsigned int start, unsigned int end, int key);
+    void SimpleSearch(unsigned int start, unsigned int end);
+
+    void BinSearch(unsigned int start, unsigned int end, int key);
 
 public:
     BinarySearch(std::vector<int> array, std::vector<int> search_keys);
