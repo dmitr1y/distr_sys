@@ -1,5 +1,5 @@
 # distributed systems
-Variant 4
+Option 4
 
 ## lab1
 ```text

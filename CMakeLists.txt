@@ -3,4 +3,4 @@ project(distr_sys)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(distr_sys main.cpp)
+add_executable(distr_sys main.cpp BinarySearch/BinarySearch.cpp BinarySearch/BinarySearch.h)
