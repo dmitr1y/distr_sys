@@ -13,19 +13,23 @@ private:
     std::vector<int> array;
     std::vector<int> search_keys;
 
-
 private:
-    void Sort();
 
     void PrintArray(std::vector<int> array);
 
-    bool isSorted(std::vector<int> array);
+    bool IsSorted(std::vector<int> array);
+
+public:
+    static unsigned int GetCoresCount();
+
+    unsigned int Search(std::vector<int> array, unsigned int start, unsigned int end, int key);
+
 public:
     BinarySearch(std::vector<int> array, std::vector<int> search_keys);
 
     void PrintArray();
 
-    int Search(int value);
+    int Search();
 };
 
 
