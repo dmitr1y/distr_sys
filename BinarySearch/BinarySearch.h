@@ -25,6 +25,8 @@ private:
 
     void BinSearch(unsigned int start, unsigned int end, int key);
 
+    void BinSearchManyKeys(std::vector<int> keys);
+
 public:
     BinarySearch(std::vector<int> array, std::vector<int> search_keys);
 
