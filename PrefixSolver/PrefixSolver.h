@@ -8,15 +8,27 @@
 
 #include <vector>
 
+enum Operators {
+    Addition = 0,
+    Multiplication = 1,
+    Subtraction = 2
+};
+
 class PrefixSolver {
 private:
     std::vector<int> array;
+
+private:
+
+
 public:
-    PrefixSolver(int size);
+    unsigned int cpuCount;
 
-    void RandArray(int size);
+    PrefixSolver(unsigned int size);
 
-    void Solve();
+    void RandArray(unsigned int size);
+
+    void Solve(Operators action);
 };
 
 
