@@ -30,21 +30,23 @@ void BinarySearch::PrintArray() {
 void BinarySearch::Search() {
     int cpuCount = std::thread::hardware_concurrency();
     int parts = 0;
+    int divParts = 0;
 
     std::vector<std::thread> thread_pool;
 
 //    std::cout << "cpu count: " << cpuCount << std::endl;
 //    int keys_size = this->search_keys.size();
-    parts = (int) this->search_keys.size() / cpuCount;
-    int divParts = (int) this->search_keys.size() % cpuCount;
+
 
 //    std::cout << "keys_size: " << keys_size << std::endl;
-//    std::cout << "parts: " << parts << " div: " << divParts << std::endl;
-//    std::cout << "threads: " << parts << std::endl;
 
     if (this->IsSorted(this->array)) {
 
         std::cout << "the array is sorted, so we can use binary search: " << std::endl << std::endl;
+        parts = (int) this->search_keys.size() / cpuCount;
+        divParts = (int) this->search_keys.size() % cpuCount;
+        std::cout << "parts: " << parts << " div: " << divParts << std::endl;
+
         for (int i = 0, start = 0, end = 0; i < cpuCount && i < this->search_keys.size(); ++i) {
             end = start + parts;
             if (divParts > 0) {
@@ -68,21 +70,28 @@ void BinarySearch::Search() {
 
     } else {
         std::cout << "[!] the array isn't sorted, so we using simple search: " << std::endl;
+        parts = (int) this->array.size() / cpuCount;
+        int divParts = (int) this->array.size() % cpuCount;
+//        std::cout << "parts: " << parts << " div: " << divParts << std::endl;
 
-        for (int i = 0, start = 0, end = 0; i < cpuCount && end < this->search_keys.size(); ++i) {
+        for (int i = 0, start = 0, end = 0; i < cpuCount; ++i) {
             end = start + parts;
             if (divParts > 0) {
                 end += 1;
                 divParts--;
             }
-            std::cout << "start: " << start << " end: " << end << std::endl;
-            for (int j = start; j < end; ++j) {
-                thread_pool.emplace_back(&BinarySearch::BinSearch, this, 0, this->array.size(),
-                                         this->search_keys.at(j));
-            }
-            start = end + 1;
+//            std::cout<<"out ["<<i<<"]"<<std::endl;
+//            std::cout << "start: " << start << " end: " << end <<  std::endl;
+//            std::cout << "div: " << divParts << " parts: " << parts <<  std::endl;
+
+            thread_pool.emplace_back(&BinarySearch::SimpleSearch, this, start, end);
+
+            start = end;
+
         }
+
     }
+
     for (auto &thread : thread_pool) {
         thread.join();
     }
@@ -122,7 +131,7 @@ void BinarySearch::SimpleSearch(unsigned int start, unsigned int end) {
 }
 
 void BinarySearch::BinSearchManyKeys(std::vector<int> keys) {
-    for (int i = 0; i < keys.size(); ++i) {
-        this->BinSearch(0, this->array.size(), keys[i]);
+    for (int key : keys) {
+        this->BinSearch(0, this->array.size(), key);
     }
 }
