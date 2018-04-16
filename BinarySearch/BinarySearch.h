@@ -19,7 +19,6 @@ private:
 
     bool IsSorted(std::vector<int> array);
 
-    static unsigned int GetCoresCount();
 
     void SimpleSearch(unsigned int start, unsigned int end);
 
@@ -32,7 +31,13 @@ public:
 
     void PrintArray();
 
+    void Sort();
+
     void Search();
+
+    void SearchSingleThread();
+
+    int cpuCount;
 };
 
 
