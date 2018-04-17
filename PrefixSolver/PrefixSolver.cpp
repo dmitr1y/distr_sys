@@ -67,9 +67,9 @@ void PrefixSolver::ShowVector() {
     this->ShowVector(this->array);
 }
 
-void PrefixSolver::ApplyAction(std::vector<int> &vector, Operators operators) {
+void PrefixSolver::ApplyAction(Operators action, unsigned int start, unsigned int stop) {
     for (int j = 1; j < vector.size(); ++j) {
-        switch (operators) {
+        switch (action) {
             case Addition:
                 std::cout << "[Addition]" << std::endl;
                 std::cout << vector[j] << " + " << vector[j - 1] << std::endl;

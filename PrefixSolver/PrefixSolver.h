@@ -21,7 +21,7 @@ private:
 private:
     void ShowVector(std::vector<int> vector);
 
-    void ApplyAction(std::vector<int> &vector, Operators operators);
+    void ApplyAction(Operators action, unsigned int start, unsigned int stop);
 
 public:
     unsigned int cpuCount;
