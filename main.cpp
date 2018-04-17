@@ -5,7 +5,7 @@
 int main() {
     PrefixSolver prefixSolver(5);
     prefixSolver.ShowVector();
-    prefixSolver.Solve(Addition);
+    prefixSolver.Solve(Subtraction);
 //    prefixSolver.ShowVector();
 
     return 0;

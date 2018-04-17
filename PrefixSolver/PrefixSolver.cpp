@@ -36,11 +36,11 @@ void PrefixSolver::Solve(Operators action) {
                 break;
             case Multiplication:
                 std::cout << "[Multiplication]" << std::endl;
-
+                result[j] *= result[j - 1];
                 break;
             case Subtraction:
                 std::cout << "[Subtraction]" << std::endl;
-
+                result[j] -= result[j - 1];
                 break;
             default:
                 std::cout << "[!] sorry, unknown operator." << std::endl;
