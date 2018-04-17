@@ -19,7 +19,7 @@ private:
     std::vector<int> array;
 
 private:
-
+    void ShowVector(std::vector<int> vector);
 
 public:
     unsigned int cpuCount;
@@ -29,6 +29,8 @@ public:
     void RandArray(unsigned int size);
 
     void Solve(Operators action);
+
+    void ShowVector();
 };
 
 
