@@ -28,9 +28,30 @@ void PrefixSolver::Solve(Operators action) {
     this->ShowVector(result);
     unsigned int cpuCount = std::thread::hardware_concurrency();
     std::vector<std::thread> thread_pool(cpuCount);
-    for (int i = 0; i < cpuCount; ++i) {
+    int parts = (int) this->array.size() / cpuCount;
+    int divParts = (int) this->array.size() % cpuCount;
+    std::cout << "parts: " << parts << " div: " << divParts << std::endl;
 
+    for (int i = 0, start = 0, end = 0; i < cpuCount && i < this->array.size(); ++i) {
+        end = start + parts;
+        if (divParts > 0) {
+            end += 1;
+            divParts--;
+        }
+//            std::cout<<"out ["<<i<<"]"<<std::endl;
+//            std::cout << "start: " << start << " end: " << end <<  std::endl;
+//            std::cout << "div: " << divParts << " parts: " << parts <<  std::endl;
+        std::vector<int> keys;
+        for (int j = start; j < end; ++j) {
+            keys.push_back(this->array[j]);
+        }
+//            this->PrintArray(keys);
+//            std::cout<<"vector size: "<<keys.size()<<std::endl;
+        start = end;
+
+        thread_pool.emplace_back(&PrefixSolver::ApplyAction, this, keys);
     }
+
 
     std::cout << "result: " << std::endl;
     this->ShowVector(result);
