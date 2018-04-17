@@ -27,12 +27,12 @@ void PrefixSolver::Solve(Operators action) {
     std::cout << "vector: " << std::endl;
     this->ShowVector(result);
 
-    for (int j = 0; j < result.size() - 1; ++j) {
+    for (int j = 1; j < result.size(); ++j) {
         switch (action) {
             case Addition:
                 std::cout << "[Addition]" << std::endl;
-                std::cout << result[j] << " + " << result[j + 1] << std::endl;
-                result[j] += result[j + 1];
+                std::cout << result[j] << " + " << result[j - 1] << std::endl;
+                result[j] += result[j - 1];
                 break;
             case Multiplication:
                 std::cout << "[Multiplication]" << std::endl;
