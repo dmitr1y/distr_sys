@@ -26,27 +26,12 @@ void PrefixSolver::Solve(Operators action) {
     std::vector<int> result(this->array.begin() + start, this->array.begin() + end);
     std::cout << "vector: " << std::endl;
     this->ShowVector(result);
+    unsigned int cpuCount = std::thread::hardware_concurrency();
+    std::vector<std::thread> thread_pool(cpuCount);
+    for (int i = 0; i < cpuCount; ++i) {
 
-    for (int j = 1; j < result.size(); ++j) {
-        switch (action) {
-            case Addition:
-                std::cout << "[Addition]" << std::endl;
-                std::cout << result[j] << " + " << result[j - 1] << std::endl;
-                result[j] += result[j - 1];
-                break;
-            case Multiplication:
-                std::cout << "[Multiplication]" << std::endl;
-                result[j] *= result[j - 1];
-                break;
-            case Subtraction:
-                std::cout << "[Subtraction]" << std::endl;
-                result[j] -= result[j - 1];
-                break;
-            default:
-                std::cout << "[!] sorry, unknown operator." << std::endl;
-                break;
-        }
     }
+
     std::cout << "result: " << std::endl;
     this->ShowVector(result);
 }
@@ -59,4 +44,27 @@ void PrefixSolver::ShowVector(std::vector<int> vector) {
 
 void PrefixSolver::ShowVector() {
     this->ShowVector(this->array);
+}
+
+void PrefixSolver::ApplyAction(std::vector<int> &vector, Operators operators) {
+    for (int j = 1; j < vector.size(); ++j) {
+        switch (operators) {
+            case Addition:
+                std::cout << "[Addition]" << std::endl;
+                std::cout << vector[j] << " + " << vector[j - 1] << std::endl;
+                vector[j] += vector[j - 1];
+                break;
+            case Multiplication:
+                std::cout << "[Multiplication]" << std::endl;
+                vector[j] *= vector[j - 1];
+                break;
+            case Subtraction:
+                std::cout << "[Subtraction]" << std::endl;
+                vector[j] -= vector[j - 1];
+                break;
+            default:
+                std::cout << "[!] sorry, unknown operator." << std::endl;
+                break;
+        }
+    }
 }
