@@ -9,4 +9,4 @@ message("CMAKE_CXX_FLAGS_DEBUG is ${CMAKE_CXX_FLAGS_DEBUG}")
 message("CMAKE_CXX_FLAGS_RELEASE is ${CMAKE_CXX_FLAGS_RELEASE}")
 message("CMAKE_BUILD_TYPE is ${CMAKE_BUILD_TYPE}")
 
-add_executable(distr_sys main.cpp PrefixSolver/PrefixSolver.cpp PrefixSolver/PrefixSolver.h)
+add_executable(distr_sys main.cpp MCS/cpu_relax.cpp MCS/cpu_relax.h MCS/mcs_lock.cpp MCS/mcs_lock.h)
