@@ -5,9 +5,8 @@
 #ifndef DISTR_SYS_MCS_LOCK_H
 #define DISTR_SYS_MCS_LOCK_H
 
-
 #include <cstdint>
-#include <assert.h>
+#include <cassert>
 #include <atomic>
 #include <thread>
 
@@ -17,7 +16,7 @@
 
 #include "cpu_relax.h"
 
-namespace sync {
+//namespace sync {
 
     class mcs_lock {
 
@@ -47,6 +46,6 @@ namespace sync {
 
     };
 
-}
+//}
 
 #endif //DISTR_SYS_MCS_LOCK_H

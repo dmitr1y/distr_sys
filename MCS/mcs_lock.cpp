@@ -4,7 +4,7 @@
 
 #include "mcs_lock.h"
 
-namespace sync {
+//namespace sync {
 
     void mcs_lock::lock() {
         //to acquire the lock a thread atomically appends its own local node at the tail of the list returning tail's previous contents
@@ -47,4 +47,4 @@ namespace sync {
 
     thread_local mcs_lock::mcs_node mcs_lock::local_node = mcs_lock::mcs_node{};
 
-}
+//}
