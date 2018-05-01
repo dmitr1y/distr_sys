@@ -17,9 +17,12 @@ enum Operators {
 class PrefixSolver {
 private:
     std::vector<int> array;
+    std::vector<int> result;
 
 private:
+    void Adder();
 
+    void ShowArray(std::vector<int> array);
 
 public:
     unsigned int cpuCount;
@@ -29,6 +32,9 @@ public:
     void RandArray(unsigned int size);
 
     void Solve(Operators action);
+
+    void ShowResult();
+
 };
 
 
