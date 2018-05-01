@@ -11,6 +11,7 @@
 PrefixSolver::PrefixSolver(unsigned int size) {
     this->cpuCount = std::thread::hardware_concurrency();
     this->RandArray(size);
+    this->result = this->array;
     std::cout << "rand array: ";
     ShowArray(this->array);
 }
@@ -23,30 +24,27 @@ void PrefixSolver::RandArray(unsigned int size) {
 }
 
 void PrefixSolver::Solve(Operators action) {
-    switch (action) {
-        case Addition:
-            std::cout << "[Addition]" << std::endl;
-            this->Adder();
-            break;
-        case Multiplication:
-            std::cout << "[Multiplication]" << std::endl;
-
-            break;
-        case Subtraction:
-            std::cout << "[Subtraction]" << std::endl;
-
-            break;
-        default:
-            std::cout << "sorry, unknown operator." << std::endl;
-            break;
-    }
+    this->Solver(action);
 }
 
-void PrefixSolver::Adder() {
+void PrefixSolver::Solver(Operators action) {
     this->result.resize(this->array.size());
     this->result[0] = this->array[0];
     for (int i = 1; i < this->array.size(); ++i) {
-        this->result[i] = this->result[i - 1] + this->array[i];
+        switch (action) {
+            case Addition:
+                this->result[i] = this->result[i - 1] + this->array[i];
+                break;
+            case Multiplication:
+                this->result[i] = this->result[i - 1] * this->array[i];
+                break;
+            case Subtraction:
+                this->result[i] = this->result[i - 1] - this->array[i];
+                break;
+            default:
+                return;
+        }
+
     }
 }
 
@@ -57,6 +55,6 @@ void PrefixSolver::ShowArray(std::vector<int> array) {
 }
 
 void PrefixSolver::ShowResult() {
-    std::cout << "result is: ";
+    std::cout << "result is:  ";
     this->ShowArray(this->result);
 }

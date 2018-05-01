@@ -20,7 +20,7 @@ private:
     std::vector<int> result;
 
 private:
-    void Adder();
+    void Solver(Operators action);
 
     void ShowArray(std::vector<int> array);
 
