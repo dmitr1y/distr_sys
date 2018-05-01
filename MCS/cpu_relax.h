@@ -10,12 +10,7 @@
 namespace mySync {
 
     inline static void cpu_relax() {
-
-#if (COMPILER == MVCC)
-        _mm_pause();
-#elif (COMPILER == GCC || COMPILER == LLVM)
         asm volatile("pause\n": : :"memory");
-#endif
     }
 
 }

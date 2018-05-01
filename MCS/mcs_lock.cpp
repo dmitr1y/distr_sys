@@ -12,7 +12,8 @@ namespace mySync {
             prior_node->next = &local_node;
             //thread then spins on its local locked field, waiting until its predecessor sets this field to false
             while (local_node.locked)
-                cpu_relax();
+                /* Pause instruction to prevent excess processor bus usage */
+                    asm volatile("pause\n": : :"memory");
         }
         //now first in the queue, own the lock and enter the critical section...
     }
