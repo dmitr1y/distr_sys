@@ -1,22 +1,18 @@
-//
-// Created by dmitriy on 17.04.18.
-//
-
 #ifndef DISTR_SYS_MCS_LOCK_H
 #define DISTR_SYS_MCS_LOCK_H
 
 #include <cstdint>
-#include <cassert>
+#include <assert.h>
 #include <atomic>
 #include <thread>
 
 #include <iostream>
 
-#define CACHELINE_SIZE 64 // $ getconf LEVEL1_DCACHE_LINESIZE
-
 #include "cpu_relax.h"
 
-//namespace sync {
+#define CACHELINE_SIZE 64
+
+namespace mySync {
 
     class mcs_lock {
 
@@ -46,6 +42,7 @@
 
     };
 
-//}
+}
 
-#endif //DISTR_SYS_MCS_LOCK_H
+
+#endif // DISTR_SYS_MCS_LOCK_H
