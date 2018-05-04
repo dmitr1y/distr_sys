@@ -29,25 +29,34 @@ void PrefixSolver::Solve(Operators action) {
 }
 
 void PrefixSolver::Solver(Operators action) {
+    if (this->array.empty())
+        return;
     this->result.resize(this->array.size());
     this->result[0] = this->array[0];
+    unsigned int divParts = this->result.size() / 2, modParts = this->result.size() % 2;
+    std::vector<unsigned int> partsSizePerThread;
+    std::vector<std::thread> threadsPool(threadsCount);
 
-    for (int i = 1; i < this->array.size(); ++i) {
-        switch (action) {
-            case Addition:
-                this->result[i] = this->result[i - 1] + this->array[i];
-                break;
-            case Multiplication:
-                this->result[i] = this->result[i - 1] * this->array[i];
-                break;
-            case Subtraction:
-                this->result[i] = this->result[i - 1] - this->array[i];
-                break;
-            default:
-                return;
-        }
+    if (threadsCount >= (divParts + modParts)) {
+        partsSizePerThread.resize(divParts + modParts);
+        threadsPool.resize(partsSizePerThread.size());
 
     }
+
+    partsSizePerThread[0] = divParts + modParts;
+    for (int i = 1; i < partsSizePerThread.size(); ++i) {
+        partsSizePerThread[i] = divParts;
+    }
+
+    unsigned int startPos = 0;
+
+    for (int j = 0; j < threadsPool.size(); ++j) {
+        threadsPool.emplace_back(&PrefixSolver::ApplyActionToRange, this, action, startPos, partsSizePerThread[j]);
+        startPos += partsSizePerThread[j] + 1;
+    }
+    for (auto threads:threadsPool)
+        threads.join();
+//todo добавить еще 2 операции "суммирования" результатов
 }
 
 void PrefixSolver::ShowArray(std::vector<int> array) {
@@ -64,4 +73,22 @@ void PrefixSolver::ShowResult() {
 PrefixSolver::PrefixSolver(unsigned int size, unsigned int threadsCount) {
     this->PrefixSolver(size);
     this->threadsCount = threadsCount;
+}
+
+void PrefixSolver::ApplyActionToRange(Operators action, unsigned int from, unsigned int to) {
+    for (int i = from; i < to; ++i) {
+        switch (action) {
+            case Addition:
+                this->result[i] = this->result[i - 1] + this->array[i];
+                break;
+            case Multiplication:
+                this->result[i] = this->result[i - 1] * this->array[i];
+                break;
+            case Subtraction:
+                this->result[i] = this->result[i - 1] - this->array[i];
+                break;
+            default:
+                return;
+        }
+    }
 }

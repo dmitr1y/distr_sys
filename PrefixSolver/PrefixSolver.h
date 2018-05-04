@@ -25,6 +25,8 @@ private:
 
     void ShowArray(std::vector<int> array);
 
+    void ApplyActionToRange(Operators action, unsigned int from, unsigned int to);
+
 public:
     unsigned int cpuCount;
 
