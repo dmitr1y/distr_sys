@@ -14,6 +14,7 @@ PrefixSolver::PrefixSolver(unsigned int size) {
     this->result = this->array;
     std::cout << "rand array: ";
     ShowArray(this->array);
+    this->threadsCount = 8;
 }
 
 void PrefixSolver::RandArray(unsigned int size) {
@@ -30,6 +31,7 @@ void PrefixSolver::Solve(Operators action) {
 void PrefixSolver::Solver(Operators action) {
     this->result.resize(this->array.size());
     this->result[0] = this->array[0];
+
     for (int i = 1; i < this->array.size(); ++i) {
         switch (action) {
             case Addition:
@@ -57,4 +59,9 @@ void PrefixSolver::ShowArray(std::vector<int> array) {
 void PrefixSolver::ShowResult() {
     std::cout << "result is:  ";
     this->ShowArray(this->result);
+}
+
+PrefixSolver::PrefixSolver(unsigned int size, unsigned int threadsCount) {
+    this->PrefixSolver(size);
+    this->threadsCount = threadsCount;
 }

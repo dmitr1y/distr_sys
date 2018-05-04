@@ -18,6 +18,7 @@ class PrefixSolver {
 private:
     std::vector<int> array;
     std::vector<int> result;
+    unsigned int threadsCount;
 
 private:
     void Solver(Operators action);
@@ -28,6 +29,8 @@ public:
     unsigned int cpuCount;
 
     PrefixSolver(unsigned int size);
+
+    PrefixSolver(unsigned int size, unsigned int threadsCount);
 
     void RandArray(unsigned int size);
 
