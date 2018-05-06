@@ -26,22 +26,25 @@ public:
         }
     }
 
-    bool enqueue(T const &value) {
+    void enqueue(T const &value) {
         auto node = new Node<T>;
         node->data = value;
         node->next = nullptr;
 
-        auto last = std::atomic_load(&head);
-        for (; last->next != nullptr; last = last->next) {
+        // load tail
+        while (true) {
+            auto _tail = std::atomic_load(&tail);
+            // check real tail
+            if (_tail->next != nullptr) {
+                std::atomic_compare_exchange_weak(&tail, &_tail, tail->next);
+                continue;
+            }
+            if (std::atomic_compare_exchange_weak(&_tail->next, nullptr, &node))
+                return;
         }
+    }
 
-//checking for changes in list
-        auto _tail = std::atomic_load(&tail);
-        if (last != _tail) {
-//            if changes detected
-            delete node;
-            return false;
-        }
+    bool dequeue(T &value) {
 
     }
 };
