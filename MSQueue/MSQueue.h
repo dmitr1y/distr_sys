@@ -26,6 +26,7 @@ public:
         }
     }
 
+    template<typename T>
     void enqueue(T const &value) {
         auto node = new Node<T>;
         node->data = value;
@@ -46,6 +47,7 @@ public:
         }
     }
 
+    template<typename T>
     bool dequeue(T &value) {
         while (true) {
             auto _head = std::atomic_load(&head);
