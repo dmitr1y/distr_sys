@@ -31,21 +31,40 @@ public:
         node->data = value;
         node->next = nullptr;
 
-        // load tail
         while (true) {
             auto _tail = std::atomic_load(&tail);
-            // check real tail
+            // check real tail, if not - repeat action
             if (_tail->next != nullptr) {
                 std::atomic_compare_exchange_weak(&tail, &_tail, tail->next);
                 continue;
             }
-            if (std::atomic_compare_exchange_weak(&_tail->next, nullptr, &node))
+            // if success - exit
+            if (std::atomic_compare_exchange_weak(&_tail->next, nullptr, node)) {
+                std::atomic_compare_exchange_weak(&tail, &_tail, node);
                 return;
+            }
         }
     }
 
     bool dequeue(T &value) {
+        while (true) {
+            auto _head = std::atomic_load(&head);
+            auto _headNext = std::atomic_load(&head->next);
+            auto _tail = std::atomic_load(&tail);
 
+            if (_head->next == nullptr)
+                return false; //empty queue, we're can't delete
+
+            if (_head == _tail) {
+                std::atomic_compare_exchange_weak(&tail, &_tail, tail->next);
+                continue; //someone hadn't "incremented" tail pointer
+            }
+
+            if (std::atomic_compare_exchange_weak(&head, &_head, _headNext)) {
+                value = _headNext->value;
+                return true;
+            }
+        }
     }
 };
 
