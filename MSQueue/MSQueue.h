@@ -69,7 +69,7 @@ bool MSQueue<T>::dequeue(T &value) {
         }
 
         if (std::atomic_compare_exchange_weak(&head, &_head, _headNext)) {
-            value = _headNext->value;
+            value = _headNext.get()->data;
             return true;
         }
     }
