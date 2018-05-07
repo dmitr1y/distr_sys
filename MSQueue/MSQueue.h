@@ -15,7 +15,7 @@ class MSQueue {
 public:
     MSQueue() {
 //        this->tail(new Node<T>);
-        this->head = this->tail;
+        this->head = this->tail = std::make_shared<Node<T>>();
     }
 
 //    ~MSQueue() {
@@ -34,7 +34,7 @@ public:
 
 template<typename T>
 void MSQueue<T>::enqueue(const T &value) {
-    auto node = new Node<T>;
+    std::shared_ptr<Node<T>> node = std::make_shared<Node<T>>();
     node->data = value;
     node->next = nullptr;
 
@@ -46,7 +46,8 @@ void MSQueue<T>::enqueue(const T &value) {
             continue;
         }
         // if success - exit
-        if (std::atomic_compare_exchange_weak(&_tail->next, nullptr, node)) {
+        std::shared_ptr<Node<T>> s_null = nullptr;
+        if (std::atomic_compare_exchange_weak(&_tail->next, &s_null, node)) {
             std::atomic_compare_exchange_weak(&tail, &_tail, node);
             return;
         }

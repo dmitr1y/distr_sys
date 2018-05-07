@@ -8,11 +8,12 @@
 Exp::Exp(unsigned int maxNumberSize, unsigned int threadsCount) {
     this->threadsCount = threadsCount;
     this->maxNumberSize = maxNumberSize;
-    this->threadPool.resize(threadsCount);
+    this->threadPool.reserve(threadsCount);
 }
 
 void Exp::testMSQueue() {
     MSQueue<int> queue;
+
 
     for (unsigned int i = 0; i < threadsCount; ++i) {
         threadPool.emplace_back(&Exp::testFunctionMS, this, std::ref(queue));
@@ -20,7 +21,6 @@ void Exp::testMSQueue() {
 
     for (auto &item:threadPool)
         item.join();
-
 }
 
 void Exp::testMutex() {
