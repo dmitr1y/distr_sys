@@ -8,20 +8,21 @@
 #include <thread>
 #include "PrefixSolver.h"
 
-PrefixSolver::PrefixSolver(unsigned int size) {
+PrefixSolver::PrefixSolver() {
+    this->threadsCount = 8;
     this->cpuCount = std::thread::hardware_concurrency();
-    this->RandArray(size);
+    this->RandArray(8);
     this->result = this->array;
     std::cout << "rand array: ";
     ShowArray(this->array);
-    this->threadsCount = 8;
 }
 
 void PrefixSolver::RandArray(unsigned int size) {
     std::cout << "generating rand vector with size " << size << std::endl;
-//    this->array.resize(size);
-//    std::generate(this->array.begin(), this->array.end(), std::rand);
-    this->array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+//    todo in release
+    this->array.resize(size);
+    std::generate(this->array.begin(), this->array.end(), std::rand);
+//    this->array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 }
 
 void PrefixSolver::Solve(Operators action) {
@@ -30,33 +31,55 @@ void PrefixSolver::Solve(Operators action) {
 
 void PrefixSolver::Solver(Operators action) {
     if (this->array.empty())
-        return;
+        return; // if the array is empty then we're can't solve anything
+
     this->result.resize(this->array.size());
-    this->result[0] = this->array[0];
-    unsigned int divParts = this->result.size() / 2, modParts = this->result.size() % 2;
-    std::vector<unsigned int> partsSizePerThread;
-    std::vector<std::thread> threadsPool(threadsCount);
+    this->result[0] = this->array[0]; //first number doesn't changing
 
-    if (threadsCount >= (divParts + modParts)) {
-        partsSizePerThread.resize(divParts + modParts);
-        threadsPool.resize(partsSizePerThread.size());
+    unsigned int divParts = result.size() / threadsCount, modParts = result.size() % threadsCount;
+//    std::vector<unsigned int> partsSizePerThread;
+    std::vector<std::thread> threadsPool;
+    std::cout << "array size:  [" << result.size() << "] " << " threads count [" << threadsCount << "]: " << std::endl;
 
+    unsigned int partsCount = threadsCount;
+    if (divParts < 2) {
+        if (modParts < 2) {
+//            масив всего из двух элементов
+            partsCount = 1;
+        } else {
+            unsigned int tmpDiv = result.size() / 2; //найдем количество пар, чтобы был смысл параллелить
+            unsigned int tmpMod = result.size() % 2;
+            divParts = partsCount = tmpDiv;
+            modParts = tmpMod;
+        }
     }
 
-    partsSizePerThread[0] = divParts + modParts;
-    for (int i = 1; i < partsSizePerThread.size(); ++i) {
-        partsSizePerThread[i] = divParts;
-    }
+    //если количество пар из элементов массива меньше или равно количеству потоков, то так и оставляем
+    threadsPool.resize(partsCount);
 
-    unsigned int startPos = 0;
+
+    unsigned int startPos = 1;
+//    std::cout << "divParts [" << divParts << "] " << " modParts [" << modParts << "]: " << std::endl;
+
 
     for (int j = 0; j < threadsPool.size(); ++j) {
-        threadsPool.emplace_back(&PrefixSolver::ApplyActionToRange, this, action, startPos, partsSizePerThread[j]);
-        startPos += partsSizePerThread[j] + 1;
+        unsigned int parts = divParts;
+        if (modParts > 0) {
+            parts++;
+            modParts--;
+        }
+//        std::cout << "parts[" << j << "] " << parts << std::endl;
+//        std::cout << "start pos [" << startPos << "] " << " end pos [" << startPos + parts << "]: " << std::endl
+//                  << std::endl;
+
+        threadsPool.emplace_back(&PrefixSolver::ApplyActionToRange, this, action, startPos, startPos + parts);
+        startPos += parts + 1; //
     }
-    for (auto threads:threadsPool)
+    for (auto &threads:threadsPool)
         threads.join();
 //todo добавить еще 2 операции "суммирования" результатов
+    threadsPool.clear();
+
 }
 
 void PrefixSolver::ShowArray(std::vector<int> array) {
@@ -71,7 +94,12 @@ void PrefixSolver::ShowResult() {
 }
 
 PrefixSolver::PrefixSolver(unsigned int size, unsigned int threadsCount) {
-    this->PrefixSolver(size);
+    this->cpuCount = std::thread::hardware_concurrency();
+    this->RandArray(size);
+    this->result = this->array;
+    std::cout << "rand array: ";
+    ShowArray(this->array);
+    std::cout << std::endl;
     this->threadsCount = threadsCount;
 }
 

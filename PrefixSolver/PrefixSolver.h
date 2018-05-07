@@ -30,7 +30,7 @@ private:
 public:
     unsigned int cpuCount;
 
-    PrefixSolver(unsigned int size);
+    PrefixSolver();
 
     PrefixSolver(unsigned int size, unsigned int threadsCount);
 
