@@ -7,6 +7,7 @@
 
 #include <mutex>
 #include <queue>
+#include <iostream>
 
 template<typename T>
 class MutexQueue {
@@ -16,27 +17,33 @@ private:
     std::queue<T> list;
 
 public:
-    template<typename T>
-    void enqueue(const T &value) {
-        mutex.lock();
-        list.push(value);
-        mutex.unlock();
-    }
+    void enqueue(const T &value);
 
-    template<typename T>
-    bool dequeue(T &value) {
-        mutex.lock();
-
-        if (list.empty()) {
-            mutex.unlock();
-            return false;
-        }
-
-        value = list.front();
-        mutex.unlock();
-        return true;
-    }
+    bool dequeue(T &value);
 
 };
+
+template<typename T>
+void MutexQueue<T>::enqueue(const T &value) {
+    std::cout << "enqueue" << std::endl;
+    mutex.lock();
+    list.push(value);
+    mutex.unlock();
+}
+
+template<typename T>
+bool MutexQueue<T>::dequeue(T &value) {
+    std::cout << "dequeue" << std::endl;
+    mutex.lock();
+
+    if (list.empty()) {
+        mutex.unlock();
+        return false;
+    }
+
+    value = list.front();
+    mutex.unlock();
+    return true;
+}
 
 #endif //DISTR_SYS_MUTEXQUEUE_H

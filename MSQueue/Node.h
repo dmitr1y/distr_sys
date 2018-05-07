@@ -11,8 +11,8 @@
 template<typename T>
 class Node {
 public:
-    std::shared_ptr<T> data;
-    std::shared_ptr<Node> next;
+    T data;
+    std::shared_ptr<Node> next = nullptr;
 
     Node() {
         this->next = nullptr;

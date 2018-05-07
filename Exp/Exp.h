@@ -7,13 +7,22 @@
 
 
 #include <vector>
+#include <thread>
+#include "../MutexQueue/MutexQueue.h"
+#include "../MSQueue/MSQueue.h"
 
 class Exp {
 private:
-    unsigned int arraySize;
+    unsigned int maxNumberSize;
     unsigned int threadsCount;
+    std::vector<std::thread> threadPool;
+
+    void testFunctionMutex(MutexQueue<int> &queue);
+
+    void testFunctionMS(MSQueue<int> &queue);
+
 public:
-    Exp(unsigned int arraySize, unsigned int threadsCount);
+    Exp(unsigned int maxNumberSize, unsigned int threadsCount);
 
     void testMSQueue();
 

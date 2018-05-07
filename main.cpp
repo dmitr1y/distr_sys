@@ -1,6 +1,9 @@
-#include <iostream>
+
+#include "Exp/Exp.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Exp exp(100, 5);
+//    exp.testMutex();
+    exp.testMSQueue();
     return 0;
 }
