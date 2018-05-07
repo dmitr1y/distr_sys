@@ -2,8 +2,8 @@
 #include "Exp/Exp.h"
 
 
-#define N_THREAD 8
-#define N_REPEATS 1
+#define N_THREAD 1
+#define N_REPEATS 10
 #define N_OPERATIONS 100000
 #define MAX_NUBER 10000
 
@@ -18,7 +18,7 @@ int main() {
         auto t0 = Time::now();
 
         exp.testMSQueue();
-
+//        exp.testMutex();
         auto t1 = Time::now();
         fsec fs = t1 - t0;
         ms d = std::chrono::duration_cast<ms>(fs);

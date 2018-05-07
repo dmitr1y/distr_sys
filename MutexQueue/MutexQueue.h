@@ -25,7 +25,6 @@ public:
 
 template<typename T>
 void MutexQueue<T>::enqueue(const T &value) {
-    std::cout << "enqueue" << std::endl;
     mutex.lock();
     list.push(value);
     mutex.unlock();
@@ -33,7 +32,6 @@ void MutexQueue<T>::enqueue(const T &value) {
 
 template<typename T>
 bool MutexQueue<T>::dequeue(T &value) {
-    std::cout << "dequeue" << std::endl;
     mutex.lock();
 
     if (list.empty()) {
