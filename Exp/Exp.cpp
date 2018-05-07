@@ -5,9 +5,10 @@
 #include <random>
 #include "Exp.h"
 
-Exp::Exp(unsigned int maxNumberSize, unsigned int threadsCount) {
+Exp::Exp(unsigned int maxNumberSize, unsigned int numberCount, unsigned int threadsCount) {
     this->threadsCount = threadsCount;
     this->maxNumberSize = maxNumberSize;
+    this->numberCount = numberCount;
     this->threadPool.reserve(threadsCount);
 }
 
@@ -35,7 +36,7 @@ void Exp::testMutex() {
 }
 
 void Exp::testFunctionMS(MSQueue<int> &queue) {
-    int temp;
+    int temp = 0;
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_int_distribution<int> dist(0, 1);
@@ -43,9 +44,11 @@ void Exp::testFunctionMS(MSQueue<int> &queue) {
     int flag = dist(mt);
 
     if (flag)
-        queue.enqueue(dist1(mt));
+        for (int i = 0; i < this->numberCount / this->threadsCount; ++i)
+            queue.enqueue(dist1(mt));
     else
-        queue.dequeue(temp);
+        for (int i = 0; i < this->numberCount / this->threadsCount; ++i)
+            queue.dequeue(temp);
 }
 
 void Exp::testFunctionMutex(MutexQueue<int> &queue) {
@@ -57,7 +60,11 @@ void Exp::testFunctionMutex(MutexQueue<int> &queue) {
     int flag = dist(mt);
 
     if (flag)
-        queue.enqueue(dist1(mt));
+        for (int i = 0; i < this->numberCount / this->threadsCount; ++i)
+            queue.enqueue(dist1(mt));
+
     else
-        queue.dequeue(temp);
+        for (int i = 0; i < this->numberCount / this->threadsCount; ++i)
+            queue.dequeue(temp);
+
 }

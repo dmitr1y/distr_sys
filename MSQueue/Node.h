@@ -13,10 +13,6 @@ class Node {
 public:
     T data;
     std::shared_ptr<Node> next = nullptr;
-
-    Node() {
-        this->next = nullptr;
-    }
 };
 
 #endif //DISTR_SYS_NODE_H

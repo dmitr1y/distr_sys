@@ -15,6 +15,7 @@ class Exp {
 private:
     unsigned int maxNumberSize;
     unsigned int threadsCount;
+    unsigned int numberCount;
     std::vector<std::thread> threadPool;
 
     void testFunctionMutex(MutexQueue<int> &queue);
@@ -22,7 +23,7 @@ private:
     void testFunctionMS(MSQueue<int> &queue);
 
 public:
-    Exp(unsigned int maxNumberSize, unsigned int threadsCount);
+    Exp(unsigned int maxNumberSize, unsigned int numberCount, unsigned int threadsCount);
 
     void testMSQueue();
 

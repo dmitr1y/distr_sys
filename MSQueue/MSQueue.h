@@ -61,7 +61,10 @@ bool MSQueue<T>::dequeue(T &value) {
         auto _headNext = std::atomic_load(&head->next);
         auto _tail = std::atomic_load(&tail);
 
-        if (_head->next == nullptr)
+        if (std::atomic_load(&head) != _head)
+            continue;
+
+        if (_headNext == nullptr)
             return false; //empty queue, we're can't delete
 
         if (_head == _tail) {
