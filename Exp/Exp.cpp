@@ -14,7 +14,7 @@ Exp::Exp(unsigned int maxNumberSize, unsigned int numberCount, unsigned int thre
 
 void Exp::testMSQueue() {
     MSQueue<int> queue;
-
+    threadPool.clear();
 
     for (unsigned int i = 0; i < threadsCount; ++i) {
         threadPool.emplace_back(&Exp::testFunctionMS, this, std::ref(queue));
@@ -22,6 +22,7 @@ void Exp::testMSQueue() {
 
     for (auto &item:threadPool)
         item.join();
+
 }
 
 void Exp::testMutex() {
