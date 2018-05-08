@@ -1,16 +1,15 @@
 
 #include <vector>
 #include <mutex>
-#include <random>
 #include "MCS/mcs_lock.h"
 
 using mySync::mcs_lock;
-static int N_THREAD = 128;
+static int N_THREAD = 14;
 static int N_REPEATS = 10;
-static int N_OPERATIONS = 100;
+static int N_OPERATIONS = 1000;
 
 void func(int &counter, mcs_lock &mcsLock) {
-    for (int i = 0; i < N_OPERATIONS; i++) {
+    for (int i = 0; i < N_OPERATIONS / N_THREAD; i++) {
         mcsLock.lock();
         counter++;
         mcsLock.unlock();
@@ -18,7 +17,7 @@ void func(int &counter, mcs_lock &mcsLock) {
 }
 
 void funcMutex(int &counter, std::mutex &mutexLock) {
-    for (int i = 0; i < N_OPERATIONS; i++) {
+    for (int i = 0; i < N_OPERATIONS / N_THREAD; i++) {
         mutexLock.lock();
         counter++;
         mutexLock.unlock();
@@ -34,13 +33,14 @@ int main() {
     for (int j = 0; j < N_REPEATS; ++j) {
 
         int counter = 0;
-        mcs_lock mcsLock;
+//        mcs_lock mcsLock;
+        std::mutex mutexLock;
         std::vector<std::thread> thread_pool;
         auto t0 = Time::now();
 
         //testing field
         for (int i = 0; i < N_THREAD; ++i)
-            thread_pool.emplace_back(func, std::ref(counter), std::ref(mcsLock));
+            thread_pool.emplace_back(funcMutex, std::ref(counter), std::ref(mutexLock));
 
         for (auto &thread : thread_pool)
             thread.join();
