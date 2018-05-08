@@ -22,16 +22,15 @@ int main() {
         int counter = 0;
         mcs_lock mcsLock;
         std::vector<std::thread> thread_pool;
-
-
         auto t0 = Time::now();
 
+        //testing field
         for (int i = 0; i < N_THREAD; ++i)
             thread_pool.emplace_back(func, std::ref(counter), std::ref(mcsLock));
 
         for (auto &thread : thread_pool)
             thread.join();
-
+        //end of testing field
         auto t1 = Time::now();
         fsec fs = t1 - t0;
         ms d = std::chrono::duration_cast<ms>(fs);
