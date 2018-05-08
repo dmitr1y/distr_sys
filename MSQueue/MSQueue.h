@@ -14,18 +14,8 @@ class MSQueue {
     std::shared_ptr<Node<T>> tail;
 public:
     MSQueue() {
-//        this->tail(new Node<T>);
         this->head = this->tail = std::make_shared<Node<T>>();
     }
-
-//    ~MSQueue() {
-//        auto node = head;
-//        while (node->next != nullptr) {
-//            auto item = node;
-//            node = node->next;
-//            delete item;
-//        }
-//    }
 
     void enqueue(T const &value);
 
