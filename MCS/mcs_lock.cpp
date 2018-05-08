@@ -8,18 +8,14 @@ namespace mySync {
                                         std::memory_order_acquire);
         if (prior_node != nullptr) {
             local_node.locked = true;
-            //if the list was not previously empty, it sets the predecessor’s next field to refer to its own local node
             prior_node->next = &local_node;
-            //thread then spins on its local locked field, waiting until its predecessor sets this field to false
             while (local_node.locked)
                 /* Pause instruction to prevent excess processor bus usage */
                     asm volatile("pause\n": : :"memory");
         }
-        //now first in the queue, own the lock and enter the critical section...
     }
 
     void mcs_lock::unlock() {
-        //...leave the critical section
         //check whether this thread's local node’s next field is null
         if (local_node.next == nullptr) {
             //if so, then either:
@@ -36,9 +32,7 @@ namespace mySync {
             //otherwise, another thread is in the process of trying to acquire the lock, so spins waiting for it to finish
             while (local_node.next == nullptr) {};
         }
-        //in either case, once the successor has appeared, the unlock() method sets its successor’s locked field to false, indicating that the lock is now free
         local_node.next->locked = false;
-        //at this point no other thread can access this node and it can be reused
         local_node.next = nullptr;
     }
 

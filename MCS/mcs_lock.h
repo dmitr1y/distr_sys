@@ -19,14 +19,10 @@ namespace mySync {
         struct mcs_node {
 
             bool locked{true};
-//            uint8_t pad1[CACHELINE_SIZE - sizeof(bool)];
 
             mcs_node *next{nullptr};
-//            uint8_t pad2[CACHELINE_SIZE - sizeof(mcs_node *)];
 
         };
-
-//        static_assert(sizeof(mcs_node) == 2 * CACHELINE_SIZE, "");
 
     public:
 
